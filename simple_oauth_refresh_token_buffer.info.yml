@@ -1,0 +1,7 @@
+name: Simple OAuth Refresh Token Buffer
+type: module
+description: Buffers token refresh responses for a set period of time to combat refresh race conditions.
+core_version_requirement: ^10
+package: Authentication
+dependencies:
+  - simple_oauth

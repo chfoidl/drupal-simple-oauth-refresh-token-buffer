@@ -1,0 +1,20 @@
+parameters:
+  simple_oauth_refresh_token_buffer.expire: 60
+
+services:
+  logger.channel.simple_oauth_refresh_token_buffer:
+    parent: logger.channel_base
+    arguments: [ 'simple_oauth_refresh_token_buffer' ]
+
+  simple_oauth_refresh_token_buffer.tempstore:
+    parent: tempstore.shared
+    arguments:
+      index_4: '%simple_oauth_refresh_token_buffer.expire%'
+
+  simple_oauth_refresh_token_buffer.event_subscriber.request:
+    class: Drupal\simple_oauth_refresh_token_buffer\EventSubscriber\RequestSubscriber
+    arguments:
+      - '@simple_oauth_refresh_token_buffer.tempstore'
+      - '@logger.channel.simple_oauth_refresh_token_buffer'
+    tags:
+      - { name: event_subscriber }
