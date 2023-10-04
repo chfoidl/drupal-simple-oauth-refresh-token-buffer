@@ -10,6 +10,29 @@ use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 
 /**
+ * Install hook.
+ */
+function simple_oauth_refresh_token_buffer_install() {
+  $database = Database::getConnection();
+
+  // Update existing consumers.
+  $database->update('consumer_field_data')
+    ->fields(['refresh_token_buffer_enabled' => 0])
+    ->isNull('refresh_token_buffer_enabled')
+    ->execute();
+
+  $database->update('consumer_field_data')
+    ->fields(['refresh_token_buffer_wait_timeout' => 100])
+    ->isNull('refresh_token_buffer_wait_timeout')
+    ->execute();
+
+  $database->update('consumer_field_data')
+    ->fields(['refresh_token_buffer_wait_retry_count' => 10])
+    ->isNull('refresh_token_buffer_wait_retry_count')
+    ->execute();
+}
+
+/**
  * Install consumer base fields.
  */
 function simple_oauth_refresh_token_buffer_update_8001() {
@@ -64,14 +87,21 @@ function simple_oauth_refresh_token_buffer_update_8001() {
     \Drupal::entityDefinitionUpdateManager()->installFieldStorageDefinition($name, 'consumer', 'simple_oauth_refresh_token_buffer', $definition);
   }
 
-  // Update existing consumers.
+  // Populate fields.
   $database = Database::getConnection();
 
   $database->update('consumer_field_data')
-    ->fields([
-      'refresh_token_buffer_enabled' => 0,
-      'refresh_token_buffer_wait_timeout' => 100,
-      'refresh_token_buffer_wait_retry_count' => 10,
-    ])
+    ->fields(['refresh_token_buffer_enabled' => 0])
+    ->isNull('refresh_token_buffer_enabled')
+    ->execute();
+
+  $database->update('consumer_field_data')
+    ->fields(['refresh_token_buffer_wait_timeout' => 100])
+    ->isNull('refresh_token_buffer_wait_timeout')
+    ->execute();
+
+  $database->update('consumer_field_data')
+    ->fields(['refresh_token_buffer_wait_retry_count' => 10])
+    ->isNull('refresh_token_buffer_wait_retry_count')
     ->execute();
 }
