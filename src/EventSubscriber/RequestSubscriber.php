@@ -226,6 +226,7 @@ class RequestSubscriber implements EventSubscriberInterface {
           'Content-Type' => 'application/json; charset=UTF-8',
           'Cache-Control' => 'no-store, private',
           'Pragma' => 'no-cache',
+          'X-Buffered' => '1',
         ],
       );
 
