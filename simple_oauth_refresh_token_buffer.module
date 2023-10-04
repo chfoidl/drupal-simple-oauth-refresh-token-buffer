@@ -92,7 +92,7 @@ function simple_oauth_refresh_token_buffer_form_consumer_form_alter(array &$form
       '#attributes' => [
         'class' => ['form-element'],
         'disabled' => TRUE,
-        'style' => ['font-style: italic;']
+        'style' => ['font-style: italic;'],
       ],
     ],
     '#states' => [
