@@ -36,7 +36,7 @@ jobs:
         uses: actions/cache@v3
         with:
           path: /tmp/composer-cache
-          key: ${{ runner.os }}-${{ hashFiles('**/composer.lock') }}
+          key: ${{ runner.os }}-${{ hashFiles('**/composer.spoons.lock') }}
 
       - name: Install dependencies
         run: setup-drupal
