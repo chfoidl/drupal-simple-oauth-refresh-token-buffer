@@ -27,9 +27,6 @@ jobs:
           restore-keys: |
             cache-${{ runner.os }}-
 
-          gc-linux: true
-          gc-max-store-size-linux: 1000000000
-
           purge-caches: true
           purge-key: cache-${{ runner.os }}-
           purge-created: true
