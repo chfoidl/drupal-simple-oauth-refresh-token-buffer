@@ -57,6 +57,7 @@
             export DRUPAL_CORE_CONSTRAINT="^10"
             export COMPOSER_PLUGIN_CONSTRAINT="^2"
             export COMPOSER="composer.spoons.json"
+            export COMPOSER_CACHE_DIR="/tmp/composer-cache"
             export WEB_ROOT="web"
             export NONINTERACTIVE="1"
             export COMPOSER_NO_INTERACTION="1"
