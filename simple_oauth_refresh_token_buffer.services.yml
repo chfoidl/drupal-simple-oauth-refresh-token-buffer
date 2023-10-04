@@ -15,6 +15,7 @@ services:
     class: Drupal\simple_oauth_refresh_token_buffer\EventSubscriber\RequestSubscriber
     arguments:
       - '@simple_oauth_refresh_token_buffer.tempstore'
+      - '@consumer.negotiator'
       - '@logger.channel.simple_oauth_refresh_token_buffer'
     tags:
       - { name: event_subscriber }

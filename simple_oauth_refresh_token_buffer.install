@@ -1,0 +1,77 @@
+<?php
+
+/**
+ * @file
+ * Install file.
+ */
+
+use Drupal\Core\Database\Database;
+use Drupal\Core\Field\BaseFieldDefinition;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
+
+/**
+ * Install consumer base fields.
+ */
+function simple_oauth_refresh_token_buffer_update_8001() {
+  $fields = [];
+
+  $fields['refresh_token_buffer_enabled'] = BaseFieldDefinition::create('boolean')
+    ->setLabel(new TranslatableMarkup('Enable Refresh Token Buffer'))
+    ->setDescription(new TranslatableMarkup('If enabled, token refresh responses are buffered for a short time to avoid race conditions.'))
+    ->setDisplayOptions('view', [
+      'label' => 'inline',
+      'weight' => 6,
+    ])
+    ->setDisplayOptions('form', [
+      'weight' => 6,
+    ])
+    ->setRevisionable(TRUE)
+    ->setTranslatable(FALSE)
+    ->setRequired(FALSE)
+    ->setDefaultValue(FALSE);
+
+  $fields['refresh_token_buffer_wait_timeout'] = BaseFieldDefinition::create('integer')
+    ->setLabel(new TranslatableMarkup('Refresh Token Buffer Wait Timeout'))
+    ->setDescription(new TranslatableMarkup('Time in Milliseconds to wait when a token refresh is already pending, before trying again.'))
+    ->setDisplayOptions('view', [
+      'label' => 'inline',
+      'weight' => 6,
+    ])
+    ->setDisplayOptions('form', [
+      'weight' => 6,
+    ])
+    ->setRevisionable(TRUE)
+    ->setTranslatable(FALSE)
+    ->setRequired(FALSE)
+    ->setDefaultValue(100);
+
+  $fields['refresh_token_buffer_wait_retry_count'] = BaseFieldDefinition::create('integer')
+    ->setLabel(new TranslatableMarkup('Refresh Token Buffer Wait Retry Count'))
+    ->setDescription(new TranslatableMarkup('Number of times to try to get the buffered response for a already running token refresh. After exceeding this number of tries, an error response is returned.'))
+    ->setDisplayOptions('view', [
+      'label' => 'inline',
+      'weight' => 6,
+    ])
+    ->setDisplayOptions('form', [
+      'weight' => 6,
+    ])
+    ->setRevisionable(TRUE)
+    ->setTranslatable(FALSE)
+    ->setRequired(FALSE)
+    ->setDefaultValue(10);
+
+  foreach ($fields as $name => $definition) {
+    \Drupal::entityDefinitionUpdateManager()->installFieldStorageDefinition($name, 'consumer', 'simple_oauth_refresh_token_buffer', $definition);
+  }
+
+  // Update existing consumers.
+  $database = Database::getConnection();
+
+  $database->update('consumer_field_data')
+    ->fields([
+      'refresh_token_buffer_enabled' => 0,
+      'refresh_token_buffer_wait_timeout' => 100,
+      'refresh_token_buffer_wait_retry_count' => 10,
+    ])
+    ->execute();
+}

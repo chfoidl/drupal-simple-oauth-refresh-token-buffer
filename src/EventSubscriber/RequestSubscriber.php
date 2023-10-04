@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\simple_oauth_refresh_token_buffer\EventSubscriber;
 
+use Drupal\consumers\Negotiator;
 use Drupal\Core\TempStore\SharedTempStore;
 use Drupal\Core\TempStore\SharedTempStoreFactory;
 use Psr\Log\LoggerInterface;
@@ -29,11 +30,14 @@ class RequestSubscriber implements EventSubscriberInterface {
    *
    * @param \Drupal\Core\TempStore\SharedTempStoreFactory $tempStoreFactory
    *   The temp store factory service.
+   * @param \Drupal\consumers\Negotiator $negotiator
+   *   The consumer negotiator service.
    * @param \Psr\Log\LoggerInterface $logger
    *   The logger service.
    */
   public function __construct(
     protected SharedTempStoreFactory $tempStoreFactory,
+    protected Negotiator $negotiator,
     protected LoggerInterface $logger,
   ) {
     $this->tempStore = $tempStoreFactory->get('simple_oauth_refresh_token_buffer');
@@ -115,13 +119,16 @@ class RequestSubscriber implements EventSubscriberInterface {
     // already running.
     // In that case, we wait for a set period of time and try again.
     if ($cachedResponsePayload === "wait") {
-      if ($count < 10) {
+      $retryCount = $this->getWaitRetryCount($request);
+      $timeout = $this->getWaitTimeout($request);
+
+      if ($count < $retryCount) {
         $this->logger->warning('Waiting for @id', [
           '@id' => $requestId,
         ]);
 
-        // Wait for 100 ms.
-        usleep(100_000);
+        // Wait.
+        usleep($timeout);
 
         // Recurse.
         $this->checkRequest($event, $count + 1);
@@ -154,8 +161,20 @@ class RequestSubscriber implements EventSubscriberInterface {
       return FALSE;
     }
 
+    // Only handle refresh_token grant requests.
     $grantType = $request->request->get('grant_type');
     if ($grantType !== 'refresh_token') {
+      return FALSE;
+    }
+
+    // Check if enabled for consumer.
+    $consumer = $this->negotiator->negotiateFromRequest($request);
+    if (!$consumer) {
+      return FALSE;
+    }
+
+    $enabledField = $consumer->get('refresh_token_buffer_enabled');
+    if ($enabledField->isEmpty() || $enabledField->getString() !== '1') {
       return FALSE;
     }
 
@@ -231,6 +250,37 @@ class RequestSubscriber implements EventSubscriberInterface {
     );
 
     $event->setResponse($response);
+  }
+
+  /**
+   * Get configured wait timeout value in microseconds.
+   */
+  protected function getWaitTimeout(Request $request) {
+    $consumer = $this->negotiator->negotiateFromRequest($request);
+
+    $milliseconds = ((int) $consumer->get('refresh_token_buffer_wait_timeout')->getString()) ?? 100;
+
+    $this->logger->debug('Using timeout value of @timeout', [
+      '@timeout' => $milliseconds,
+    ]);
+
+    // We need the value in microseconds.
+    return $milliseconds * 1000;
+  }
+
+  /**
+   * Get configured wait retry count.
+   */
+  protected function getWaitRetryCount(Request $request) {
+    $consumer = $this->negotiator->negotiateFromRequest($request);
+
+    $count = ((int) $consumer->get('refresh_token_buffer_wait_retry_count')->getString()) ?? 10;
+
+    $this->logger->debug('Using retry count value of @count', [
+      '@count' => $count,
+    ]);
+
+    return $count;
   }
 
 }
