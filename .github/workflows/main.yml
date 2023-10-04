@@ -25,3 +25,6 @@ jobs:
 
       - name: PHPCS
         run: phpcs --standard=Drupal,DrupalPractice --extensions=php,module,inc,install,test,profile,theme,css,info,txt,md,yml,php  web/modules/custom
+
+      - name: PHPUnit
+        run: composer unit
