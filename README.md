@@ -8,10 +8,11 @@ This modules buffers previous successful HTTP Responses for the OAuth 2.0 `Refre
 - [How does it work?](#how-does-it-work)
 - [Installation](#installation)
 - [Configuration](#configuration)
-  - [Enable / Disable](#enable-disable)
+  - [Enable / Disable](#enable--disable)
   - [Buffer TTL](#buffer-ttl)
   - [Wait Timeout](#wait-timeout)
   - [Wait Retry Count](#wait-retry-count)
+- [Module Development](#module-development)
 
 ## Motivation
 
@@ -78,3 +79,9 @@ Number of tries the request handler checks for the finished token refresh respon
 After exceeding this retry count an error response is being returned.
 
 The retry count value can be configured in the `Consumer` settings.
+
+## Module Development
+
+[Development is done over at GitHub!](https://github.com/wunderwerkio/drupal-simple-oauth-refresh-token-buffer)
+
+Please file any issues and pull requests there.
