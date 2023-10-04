@@ -2,6 +2,12 @@
 
 This modules buffers previous successful HTTP Responses for the OAuth 2.0 `RefreshTokenGrant` of the `simple_oauth` drupal contrib module.
 
+**Table of Contents**
+
+- [Motivation](#motivation)
+- [How does it work?](#how-does-it-work)
+- [Installation](#installation)
+
 ## Motivation
 
 Given the following scenario:
