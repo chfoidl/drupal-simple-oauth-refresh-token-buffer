@@ -68,6 +68,16 @@
 
             echo "DRUPAL_CORE_CONSTRAINT=^10" > .composer-plugin.env
             echo "COMPOSER_PLUGIN_CONSTRAINT=^2" >> .composer-plugin.env
+
+            echo ""
+            echo "> Setup dependencies and drupal"
+            echo "> \$ setup-drupal"
+            echo ">"
+            echo "> Run PHPCS"
+            echo "> \$ composer phpcs"
+            echo ">"
+            echo "> Run PHPUnit"
+            echo "> \$ composer unit"
           '';
         };
       }
