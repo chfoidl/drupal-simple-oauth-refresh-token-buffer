@@ -18,7 +18,7 @@
         setupDrupal = pkgs.writeShellScriptBin "setup-drupal" ''
           rm .composer-plugin.env composer.spoons.json composer.spoons.lock || true
           bash <(curl -s https://gitlab.com/drupalspoons/composer-plugin/-/raw/master/bin/setup)
-          vendor/bin/drush --root web status
+          drush --root web status
         '';
       in rec {
         default = pkgs.mkShell {
@@ -29,6 +29,20 @@
 
             setupDrupal
           ];
+
+          shellHook = ''
+            DRUPAL_CORE_CONSTRAINT="^10"
+            COMPOSER_PLUGIN_CONSTRAINT="^2"
+            COMPOSER="composer.spoons.json"
+            WEB_ROOT="web"
+            NONINTERACTIVE="1"
+            COMPOSER_NO_INTERACTION="1"
+            WEB_PORT="9000"
+            SIMPLETEST_BASE_URL="http://localhost"
+            SIMPLETEST_DB="sqlite://localhost/sites/default/files/.sqlite"
+
+            PATH="$PATH:$(pwd)/vendor/bin"
+          '';
         };
       }
     );
