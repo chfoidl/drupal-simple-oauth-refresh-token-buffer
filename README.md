@@ -25,3 +25,10 @@ Whenever a token refresh request is made to `/oauth/token` with the payload form
 - If it was not, the request is handled normally by the Authorization Server and the response is then temporarily saved.
 - If it was, but the token refresh is not finished yet, the server waits for the refresh to complete and then returns the saved response.
 - If it was and the refresh was already completed, it returns the previous response.
+
+## Installation
+
+```bash
+composer require drupal/simple_auth_refresh_token_buffer
+drush en simple_auth_refresh_token_buffer
+```
