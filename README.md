@@ -14,6 +14,7 @@ OAuth 2.0 `RefreshTokenGrant` of the `simple_oauth` drupal contrib module.
   - [Wait Timeout](#wait-timeout)
   - [Wait Retry Count](#wait-retry-count)
 - [Module Development](#module-development)
+  - [Setup Dev Envirionment](#setup-dev-environment)
 
 ## Motivation
 
@@ -101,3 +102,23 @@ The retry count value can be configured in the `Consumer` settings.
 [Development is done over at GitHub!](https://github.com/wunderwerkio/drupal-simple-oauth-refresh-token-buffer)
 
 Please file any issues and pull requests there.
+
+### Setup Dev Environment
+
+To work on the module itself, a development environment can be easily setup with the help of [Nix](https://nixos.org/).
+
+> Heavy lifting is done by the [Drupal Spoons Composer-Plugin](https://gitlab.com/drupalspoons/composer-plugin)!
+
+```sh
+# Spawn a devshell
+nix develop
+
+# Setup dependencies
+setup-drupal
+
+# Run PHPCS
+composer phpcs
+
+# Run PHPUnit
+composer unit
+```
