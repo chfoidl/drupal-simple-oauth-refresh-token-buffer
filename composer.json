@@ -1,0 +1,14 @@
+{
+    "name": "drupal/simple_oauth_refresh_token_buffer",
+    "description": "Buffers token refresh responses for a short time to avoid race conditions.",
+    "type": "drupal-module",
+    "require": {
+      "php": ">=8.1",
+      "drupal/simple_oauth": "^6.0"
+    },
+    "require-dev": {
+      "phpspec/prophecy-phpunit": "^2"
+    },
+    "license": "GPL-2.0-or-later"
+}
+
