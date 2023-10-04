@@ -1,4 +1,4 @@
-# Simple OAuth Token Refresh Buffer
+# Simple OAuth Refresh Token Buffer
 
 This modules buffers previous successful HTTP Responses for the OAuth 2.0 `RefreshTokenGrant` of the `simple_oauth` drupal contrib module.
 
