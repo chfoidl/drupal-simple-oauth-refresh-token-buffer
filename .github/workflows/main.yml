@@ -1,0 +1,27 @@
+name: Lint & Test
+
+on:
+  push:
+    branches: [1.0.x]
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  lint-and-test:
+    name: Lint & Test
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: nix develop --command bash {0}
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v3
+
+      - name: Install nix
+        uses: nixbuild/nix-quick-install-action@v25
+
+      - name: Install dependencies
+        run: setup-drupal
+
+      - name: PHPCS
+        run: phpcs --standard=Drupal,DrupalPractice --extensions=php,module,inc,install,test,profile,theme,css,info,txt,md,yml,php  web/modules/custom
