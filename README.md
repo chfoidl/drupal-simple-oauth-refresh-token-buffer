@@ -8,7 +8,7 @@ This modules buffers previous successful HTTP Responses for the OAuth 2.0 `Refre
 - [How does it work?](#how-does-it-work)
 - [Installation](#installation)
 - [Configuration](#configuration)
-  - [Enable / Disable](#enable-disable)
+  - [Enable / Disable](#enable--disable)
   - [Buffer TTL](#buffer-ttl)
   - [Wait Timeout](#wait-timeout)
   - [Wait Retry Count](#wait-retry-count)
