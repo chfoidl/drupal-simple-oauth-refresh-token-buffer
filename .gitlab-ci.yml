@@ -3,8 +3,8 @@ stages:
 
 lint_test:
   stage: lint_test
-  image: nixpkgs/nix-flakes:nixos-23.05
+  image: wunderwerk/drupalci:php81
   script:
-    - nix develop -c setup-drupal
-    - nix develop -c composer phpcs
-    - nix develop -c composer unit
+    - setup-drupal
+    - composer phpcs
+    - composer unit
