@@ -1,2 +1,10 @@
-include:
-  - remote: 'https://gitlab.com/drupalspoons/composer-plugin/-/raw/2.10.16/templates/.gitlab-ci.yml'
+stages:
+  - lint_test
+
+lint_test:
+  stage: lint_test
+  image: nixpkgs/nix-flakes:nixos-23.05
+  script:
+    - nix develop -c setup-drupal
+    - nix develop -c composer phpcs
+    - nix develop -c composer unit
